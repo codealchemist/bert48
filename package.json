@@ -1,0 +1,20 @@
+{
+  "name": "cumple-de-bert",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:netlify": "netlify dev",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@flaticon/flaticon-uicons": "^3.3.1",
+    "@netlify/blobs": "^10.7.13"
+  },
+  "devDependencies": {
+    "netlify-cli": "^22.2.2",
+    "vite": "^7.3.6"
+  }
+}

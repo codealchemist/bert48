@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Festejo Informa - Cumple de Bert</title>
+    <script>
+      ;(function () {
+        if (localStorage.getItem('theme') === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light')
+        }
+      })()
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Roboto+Condensed:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="/main.js"></script>
+    <style>
+      :root {
+        --bg-color: #121212;
+        --card-bg: #1a1a1a;
+        --text-color: #f4f4f0;
+        --accent-yellow: #f1bf00;
+        --border-color: #f4f4f0;
+        --illustration-bg: #242424;
+        --rsvp-bg: #2a2510;
+        --input-bg: #2c2c2c;
+        --btn-hover: #c9a300;
+        --shadow-color: rgba(255, 255, 255, 0.1);
+        --block-bg: #000000;
+        --block-text: #ffffff;
+      }
+
+      [data-theme='light'] {
+        --bg-color: #f4f4f0;
+        --card-bg: #ffffff;
+        --text-color: #111111;
+        --accent-yellow: #f1bf00;
+        --border-color: #111111;
+        --illustration-bg: #fafafa;
+        --rsvp-bg: #fffdf0;
+        --input-bg: #ffffff;
+        --btn-hover: #dcb000;
+        --shadow-color: rgba(0, 0, 0, 0.15);
+        --block-bg: #111111;
+        --block-text: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      .fi {
+        display: inline-block;
+        line-height: 1;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        font-family: 'Roboto Condensed', sans-serif;
+        color: var(--text-color);
+        display: flex;
+        justify-content: center;
+        padding: 20px 10px;
+        transition:
+          background-color 0.2s,
+          color 0.2s;
+      }
+
+      .invitation-card {
+        background-color: var(--card-bg);
+        width: 100%;
+        max-width: 600px;
+        border: 4px solid var(--border-color);
+        padding: 16px;
+        box-shadow: 8px 8px 0px var(--shadow-color);
+        position: relative;
+        transition:
+          background-color 0.2s,
+          border-color 0.2s;
+      }
+
+      .theme-toggle {
+        position: absolute;
+        top: -14px;
+        right: -14px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: var(--card-bg);
+        border: 2px solid var(--border-color);
+        color: var(--text-color);
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+
+      /* HEADER */
+      .header-grid {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid var(--border-color);
+        padding-bottom: 8px;
+      }
+
+      .age-badge {
+        font-family: 'Oswald', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        background-color: var(--accent-yellow);
+        color: #111111;
+        border: 2px solid var(--border-color);
+        line-height: 1;
+        padding: 2px 8px;
+        display: inline-block;
+      }
+
+      .date-badge {
+        background-color: var(--block-bg);
+        color: var(--block-text);
+        padding: 6px;
+        font-family: 'Oswald', sans-serif;
+        text-align: center;
+        flex-shrink: 0;
+      }
+
+      .date-badge .day-name {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+      }
+      .date-badge .day-num {
+        font-size: 2.2rem;
+        line-height: 1;
+        font-weight: 700;
+      }
+      .date-badge .month {
+        font-size: 0.8rem;
+      }
+
+      /* SUBHEADER STRIP */
+      .banner-strip {
+        background-color: var(--accent-yellow);
+        color: #111111;
+        border-top: 2px solid var(--border-color);
+        border-bottom: 2px solid var(--border-color);
+        font-family: 'Oswald', sans-serif;
+        font-size: 0.95rem;
+        text-align: center;
+        padding: 4px 0;
+        margin: 8px 0 16px 0;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+
+      /* MAIN CONTENT */
+      .main-title {
+        font-family: 'Oswald', sans-serif;
+        font-size: 2.5rem;
+        line-height: 0.95;
+        text-align: center;
+        margin-bottom: 12px;
+        font-weight: 700;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .left-col {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .intro-box {
+        border-left: 3px solid var(--accent-yellow);
+        padding-left: 8px;
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+        line-height: 1.2;
+      }
+
+      .illustration-box {
+        border: 2px solid var(--border-color);
+        background-color: var(--illustration-bg);
+        text-align: center;
+        padding: 16px 8px;
+        position: relative;
+      }
+
+      .sun-lion {
+        font-size: 5rem;
+        line-height: 1;
+        display: block;
+      }
+
+      .section-banner {
+        background-color: var(--block-bg);
+        color: var(--block-text);
+        font-family: 'Oswald', sans-serif;
+        text-align: center;
+        padding: 4px;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        margin-top: 8px;
+      }
+
+      /* SCHEDULE & MENU */
+      .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        border-top: 2px solid var(--border-color);
+        padding-top: 12px;
+        margin-bottom: 16px;
+      }
+
+      .block-title {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.1rem;
+        border-bottom: 2px solid var(--border-color);
+        margin-bottom: 8px;
+        padding-bottom: 2px;
+      }
+
+      .item-list {
+        list-style: none;
+        font-size: 0.85rem;
+      }
+
+      .item-list li {
+        margin-bottom: 6px;
+        line-height: 1.2;
+      }
+
+      .item-list li strong {
+        display: block;
+        font-family: 'Oswald', sans-serif;
+        font-size: 0.95rem;
+      }
+
+      /* RSVP SECTION */
+      .rsvp-box {
+        border: 3px double var(--border-color);
+        background-color: var(--rsvp-bg);
+        padding: 12px;
+        text-align: center;
+      }
+
+      .rsvp-box h3 {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+      }
+
+      .form-group {
+        margin-bottom: 8px;
+        text-align: left;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-bottom: 2px;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid var(--border-color);
+        font-family: inherit;
+        font-size: 0.9rem;
+        background: var(--input-bg);
+        color: var(--text-color);
+      }
+
+      .btn-submit {
+        width: 100%;
+        background-color: var(--accent-yellow);
+        color: #111111;
+        border: 2px solid var(--border-color);
+        padding: 8px;
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 4px;
+        transition: background 0.2s;
+      }
+
+      .btn-submit:hover {
+        background-color: var(--btn-hover);
+      }
+
+      .btn-cancel {
+        width: 100%;
+        background-color: transparent;
+        color: var(--text-color);
+        border: 2px solid var(--border-color);
+        padding: 8px;
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: opacity 0.2s;
+      }
+
+      .btn-cancel:hover {
+        opacity: 0.7;
+      }
+
+      .invitee-greeting {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.8rem;
+        line-height: 1;
+        font-weight: 700;
+        text-align: left;
+        color: var(--accent-yellow);
+        letter-spacing: -0.5px;
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: break-word;
+      }
+
+      .invitee-greeting[hidden] {
+        display: block;
+        visibility: hidden;
+      }
+
+      .rsvp-message {
+        font-size: 0.9rem;
+        line-height: 1.3;
+        padding: 8px 0;
+      }
+
+      .rsvp-confirmed-badge {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1rem;
+        color: var(--btn-hover);
+        margin-bottom: 4px;
+      }
+
+      .footer-location a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .footer-location a:hover {
+        text-decoration: underline;
+      }
+
+      .footer-location {
+        background-color: var(--block-bg);
+        color: var(--block-text);
+        text-align: center;
+        padding: 6px;
+        font-family: 'Oswald', sans-serif;
+        font-size: 0.9rem;
+        margin-top: 12px;
+        letter-spacing: 0.5px;
+      }
+
+      @media (max-width: 480px) {
+        .content-grid,
+        .details-grid {
+          grid-template-columns: 1fr;
+        }
+        .invitee-greeting {
+          font-size: 1.4rem;
+        }
+      }
+
+      /* DESKTOP: 2-column layout to use the extra width instead of a
+         narrow centered card */
+      @media (min-width: 860px) {
+        .invitation-card {
+          max-width: 1040px;
+          display: grid;
+          grid-template-columns: 1.3fr 1fr;
+          column-gap: 28px;
+          row-gap: 16px;
+          align-items: start;
+          grid-template-areas:
+            'header header'
+            'banner banner'
+            'title title'
+            'content rsvp'
+            'details footer';
+        }
+
+        .header-grid {
+          grid-area: header;
+        }
+        .banner-strip {
+          grid-area: banner;
+          margin: 0;
+        }
+        .main-title {
+          grid-area: title;
+          margin-bottom: 0;
+        }
+        .content-grid {
+          grid-area: content;
+          margin-bottom: 0;
+        }
+        .details-grid {
+          grid-area: details;
+          margin-bottom: 0;
+        }
+        .rsvp-box {
+          grid-area: rsvp;
+        }
+        .footer-location {
+          grid-area: footer;
+          margin-top: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invitation-card">
+      <button
+        type="button"
+        id="themeToggle"
+        class="theme-toggle"
+        aria-label="Cambiar tema"
+        onclick="toggleTheme()"
+      >
+        <i class="fi fi-rr-sun"></i>
+      </button>
+
+      <!-- HEADER -->
+      <header class="header-grid">
+        <div class="invitee-greeting" id="inviteeGreeting" hidden></div>
+        <div class="date-badge">
+          <div class="day-name">SÁBADO</div>
+          <div class="day-num">29</div>
+          <div class="month">DE AGOSTO</div>
+        </div>
+      </header>
+
+      <!-- BANNER -->
+      <div class="banner-strip">
+        EVENTO ÚNICO ★ CUMPLE DE BERT - 48 AÑOS ★ 2026
+      </div>
+
+      <!-- TITULO PRINCIPAL -->
+      <h1 class="main-title">INVITACIÓN ESPECIAL</h1>
+
+      <!-- GRID CONTENIDO -->
+      <div class="content-grid">
+        <div class="left-col">
+          <p class="intro-box">
+            Y lo vamos a celebrar con una noche increíble: amigos, buena onda y
+            música en vivo.
+          </p>
+          <div
+            style="
+              font-size: 2.5rem;
+              text-align: center;
+              margin: 10px 0;
+              display: flex;
+              justify-content: center;
+              gap: 16px;
+              color: var(--accent-yellow);
+            "
+          >
+            <i class="fi fi-rr-cake-birthday"></i>
+            <i class="fi fi-rr-beer"></i>
+            <i class="fi fi-rr-guitar"></i>
+          </div>
+        </div>
+
+        <div class="illustration-box">
+          <i class="fi fi-rr-party-horn sun-lion"></i>
+          <div class="section-banner">NOCHE DE CELEBRACIÓN</div>
+        </div>
+      </div>
+
+      <!-- DETALLES: HORARIOS Y MENU -->
+      <div class="details-grid">
+        <div>
+          <div class="block-title">
+            <i class="fi fi-rr-calendar"></i> CRONOGRAMA
+          </div>
+          <ul class="item-list">
+            <li>
+              <strong>★ 19 HS - INGRESO</strong>
+              Abrimos la puerta y vamos calentando motores.
+            </li>
+            <li>
+              <strong>★ 21 HS - EN VIVO: Panta Rei</strong>
+              Tocamos con mis amigos de Panta Rei!
+            </li>
+            <li>
+              <strong>★ Zapada!</strong>
+              Nos arriesgamos un poco y nos mandamos a improvisar. Todos los
+              amigos músicos están invitados! 🤘
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="block-title"><i class="fi fi-rr-utensils"></i> MENÚ</div>
+          <ul class="item-list">
+            <li><strong>★ Venta de GOURMET Burgers by Juanma</strong></li>
+            <li><strong>★ Opción sin gluten</strong></li>
+            <li><strong>★ Opción veggie</strong></li>
+            <li><strong>★ Opción keto</strong></li>
+            <li><strong>★ Venta de bebidas a cargo de Tao</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- FORMULARIO RSVP -->
+      <div class="rsvp-box">
+        <h3>CONFIRMAR ASISTENCIA</h3>
+        <div id="rsvpContent">
+          <p class="rsvp-message">Cargando tu invitación...</p>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="footer-location">
+        <a
+          href="https://maps.app.goo.gl/MmgCvwtpG6qyYPch9"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="fi fi-rr-marker"></i> ESPACIO TAO - Av. Hipólito Yrigoyen
+          7859, BANFIELD OESTE
+        </a>
+      </div>
+    </div>
+
+    <script>
+      function updateThemeIcon() {
+        const isLight =
+          document.documentElement.getAttribute('data-theme') === 'light'
+        document.getElementById('themeToggle').innerHTML =
+          `<i class="fi fi-rr-${isLight ? 'moon' : 'sun'}"></i>`
+      }
+
+      function toggleTheme() {
+        const isLight =
+          document.documentElement.getAttribute('data-theme') === 'light'
+        if (isLight) {
+          document.documentElement.removeAttribute('data-theme')
+          localStorage.setItem('theme', 'dark')
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light')
+          localStorage.setItem('theme', 'light')
+        }
+        updateThemeIcon()
+      }
+
+      updateThemeIcon()
+    </script>
+    <script type="module" src="/rsvp.js"></script>
+  </body>
+</html>

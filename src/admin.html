@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Cumple de Bert</title>
+  <script>
+    (function () {
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+  <script type="module" src="/main.js"></script>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1a1a1a;
+      --text-color: #f4f4f0;
+      --accent-yellow: #f1bf00;
+      --border-color: #f4f4f0;
+      --input-bg: #2c2c2c;
+      --btn-hover: #c9a300;
+      --shadow-color: rgba(255, 255, 255, 0.1);
+      --row-border: #333333;
+      --status-pending: #f1bf00;
+      --status-confirmed: #4caf50;
+      --status-cancelled: #e05555;
+    }
+
+    [data-theme="light"] {
+      --bg-color: #f4f4f0;
+      --card-bg: #ffffff;
+      --text-color: #111111;
+      --accent-yellow: #f1bf00;
+      --border-color: #111111;
+      --input-bg: #ffffff;
+      --btn-hover: #dcb000;
+      --shadow-color: rgba(0, 0, 0, 0.15);
+      --row-border: #e0e0e0;
+      --status-pending: #9a7d00;
+      --status-confirmed: #2e7d32;
+      --status-cancelled: #c62828;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    .fi {
+      display: inline-block;
+      line-height: 1;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Roboto Condensed', sans-serif;
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      padding: 20px 10px;
+    }
+
+    .admin-card {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 720px;
+      border: 4px solid var(--border-color);
+      padding: 16px;
+      box-shadow: 8px 8px 0px var(--shadow-color);
+      position: relative;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      border: 2px solid var(--border-color);
+      color: var(--text-color);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.6rem;
+      border-bottom: 3px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"], input[type="password"] {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      font-family: inherit;
+      font-size: 0.95rem;
+      background: var(--input-bg);
+      color: var(--text-color);
+    }
+
+    button {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      background-color: var(--accent-yellow);
+      color: #111111;
+      border: 2px solid var(--border-color);
+      padding: 8px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: var(--btn-hover);
+    }
+
+    .error-msg {
+      color: var(--status-cancelled);
+      font-size: 0.85rem;
+      margin-top: 4px;
+      min-height: 1.2em;
+    }
+
+    #panelView[hidden], #loginView[hidden] {
+      display: none;
+    }
+
+    .invitee-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.9rem;
+    }
+
+    .invitee-table th {
+      text-align: left;
+      font-family: 'Oswald', sans-serif;
+      border-bottom: 2px solid var(--border-color);
+      padding: 6px 4px;
+    }
+
+    .invitee-table td {
+      padding: 8px 4px;
+      border-bottom: 1px solid var(--row-border);
+      vertical-align: middle;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .status-pending { color: var(--status-pending); }
+    .status-confirmed { color: var(--status-confirmed); }
+    .status-cancelled { color: var(--status-cancelled); }
+
+    .link-cell {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .link-cell code {
+      overflow-wrap: anywhere;
+    }
+
+    .copy-btn {
+      padding: 4px 8px;
+      font-size: 0.8rem;
+    }
+
+    .empty-msg {
+      text-align: center;
+      opacity: 0.7;
+      padding: 16px 0;
+    }
+
+    .summary-panel {
+      margin-top: 16px;
+      border-top: 2px solid var(--border-color);
+      padding-top: 12px;
+    }
+
+    .hero-stat {
+      background-color: var(--accent-yellow);
+      color: #111111;
+      border: 3px solid var(--border-color);
+      text-align: center;
+      padding: 14px 8px;
+      margin-bottom: 12px;
+    }
+
+    .hero-value {
+      display: block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .hero-label {
+      display: block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .stat {
+      border: 2px solid var(--border-color);
+      padding: 8px 4px;
+      text-align: center;
+    }
+
+    .stat-value {
+      display: block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+      opacity: 0.85;
+    }
+
+    .menu-breakdown {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .menu-chip {
+      border: 1px solid var(--border-color);
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .export-row {
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-card">
+
+    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Cambiar tema" onclick="toggleTheme()"><i class="fi fi-rr-sun"></i></button>
+
+    <h1><i class="fi fi-rr-users-alt"></i> ADMIN · INVITADOS</h1>
+
+    <div id="loginView">
+      <div class="field-row">
+        <input type="password" id="passwordInput" placeholder="Contraseña de administrador">
+        <button type="button" id="loginBtn">Ingresar</button>
+      </div>
+      <div class="error-msg" id="loginError"></div>
+    </div>
+
+    <div id="panelView" hidden>
+      <form id="createForm" class="field-row">
+        <input type="text" id="nameInput" placeholder="Nombre y apellido del invitado" required>
+        <button type="submit"><i class="fi fi-rr-user-add"></i> Generar invitación</button>
+      </form>
+      <div class="error-msg" id="createError"></div>
+
+      <div class="summary-panel">
+        <div class="hero-stat">
+          <span class="hero-value" id="totalPeopleValue">0</span>
+          <span class="hero-label"><i class="fi fi-rr-users-alt"></i> PERSONAS CONFIRMADAS (INVITADOS + ACOMPAÑANTES)</span>
+        </div>
+        <div class="summary-stats">
+          <div class="stat">
+            <span class="stat-value" id="statTotal">0</span>
+            <span class="stat-label">INVITADOS</span>
+          </div>
+          <div class="stat status-pending">
+            <span class="stat-value" id="statPending">0</span>
+            <span class="stat-label">PENDIENTES</span>
+          </div>
+          <div class="stat status-confirmed">
+            <span class="stat-value" id="statConfirmed">0</span>
+            <span class="stat-label">CONFIRMARON</span>
+          </div>
+          <div class="stat status-cancelled">
+            <span class="stat-value" id="statCancelled">0</span>
+            <span class="stat-label">CANCELARON</span>
+          </div>
+        </div>
+        <div class="menu-breakdown" id="menuBreakdown"></div>
+        <div class="export-row">
+          <button type="button" id="exportBtn"><i class="fi fi-rr-file-export"></i> Exportar CSV</button>
+        </div>
+      </div>
+
+      <table class="invitee-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Acompañantes</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody id="inviteesBody"></tbody>
+      </table>
+      <div class="empty-msg" id="emptyMsg" hidden>Todavía no agregaste invitados.</div>
+    </div>
+
+  </div>
+
+  <script>
+    function updateThemeIcon() {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      document.getElementById('themeToggle').innerHTML =
+        `<i class="fi fi-rr-${isLight ? 'moon' : 'sun'}"></i>`;
+    }
+
+    function toggleTheme() {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      }
+      updateThemeIcon();
+    }
+
+    updateThemeIcon();
+  </script>
+  <script type="module" src="/admin.js"></script>
+
+</body>
+</html>
