@@ -338,7 +338,7 @@ function renderError() {
   `
 }
 
-function attachPicker(invitee, submitBtn) {
+function attachPicker(invitee, submitBtn, downloadBtn) {
   const pickerHost = document.getElementById('peoplePickerHost')
   const hintEl = document.getElementById('confirmHint')
 
@@ -357,6 +357,15 @@ function attachPicker(invitee, submitBtn) {
     guestCount: initialGuestCount,
     menuPreferences: initialMenuPreferences,
     onChange({ complete, message, value }) {
+      const unsaved = JSON.stringify(value) !== savedSnapshot
+
+      // While there are unsaved edits, swap the PDF download out for the
+      // save action — the PDF should only reflect what's actually saved.
+      if (downloadBtn) {
+        downloadBtn.hidden = unsaved
+        submitBtn.hidden = !unsaved
+      }
+
       submitBtn.disabled = !complete
 
       if (!complete) {
@@ -366,7 +375,6 @@ function attachPicker(invitee, submitBtn) {
         return
       }
 
-      const unsaved = JSON.stringify(value) !== savedSnapshot
       hintEl.className = unsaved ? 'confirm-hint confirm-hint-unsaved' : 'confirm-hint'
       hintEl.innerHTML = unsaved
         ? '<i class="fi fi-rr-floppy-disk-pen"></i><span>Tenés cambios sin guardar.</span>'
@@ -439,14 +447,32 @@ function renderConfirmed(
       <label>¿Cuántas personas vienen, vos incluído/a?</label>
       <div id="peoplePickerHost"></div>
     </div>
-    <button type="button" class="btn-submit" id="updateBtn" disabled>ACTUALIZAR DATOS</button>
+    <button type="button" class="btn-submit" id="downloadPdfBtn"><i class="fi fi-rr-file-pdf"></i> DESCARGAR PDF</button>
+    <button type="button" class="btn-submit" id="updateBtn" disabled hidden>ACTUALIZAR DATOS</button>
     <button type="button" class="btn-cancel" id="cancelBtn">CANCELAR ASISTENCIA</button>
     <div class="confirm-hint" id="confirmHint"></div>
     <div class="rsvp-message" id="actionError"></div>
   `
 
+  const downloadPdfBtn = document.getElementById('downloadPdfBtn')
+  downloadPdfBtn.addEventListener('click', async () => {
+    const errorEl = document.getElementById('actionError')
+    errorEl.textContent = ''
+    downloadPdfBtn.disabled = true
+
+    try {
+      // Lazy-loaded: jsPDF/qrcode are heavy and most visitors never click this.
+      const { downloadInvitePdf } = await import('./invite-pdf.js')
+      await downloadInvitePdf(invitee)
+    } catch {
+      errorEl.textContent = 'No pudimos generar el PDF. Probá de nuevo.'
+    } finally {
+      downloadPdfBtn.disabled = false
+    }
+  })
+
   const updateBtn = document.getElementById('updateBtn')
-  const picker = attachPicker(invitee, updateBtn)
+  const picker = attachPicker(invitee, updateBtn, downloadPdfBtn)
 
   updateBtn.addEventListener('click', async () => {
     const errorEl = document.getElementById('actionError')
