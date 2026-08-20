@@ -1,4 +1,5 @@
 import { MENU_LABELS, MENU_ICONS } from './constants.js'
+import { downloadInviteCalendar } from './invite-calendar.js'
 
 const content = document.getElementById('rsvpContent')
 const greeting = document.getElementById('inviteeGreeting')
@@ -448,6 +449,7 @@ function renderConfirmed(
       <div id="peoplePickerHost"></div>
     </div>
     <button type="button" class="btn-submit" id="downloadPdfBtn"><i class="fi fi-rr-file-pdf"></i> DESCARGAR PDF</button>
+    <button type="button" class="btn-submit" id="addToCalendarBtn"><i class="fi fi-rr-calendar-arrow-down"></i> AGREGAR AL CALENDARIO</button>
     <button type="button" class="btn-submit" id="updateBtn" disabled hidden>ACTUALIZAR DATOS</button>
     <button type="button" class="btn-cancel" id="cancelBtn">CANCELAR ASISTENCIA</button>
     <div class="confirm-hint" id="confirmHint"></div>
@@ -470,6 +472,10 @@ function renderConfirmed(
       downloadPdfBtn.disabled = false
     }
   })
+
+  document
+    .getElementById('addToCalendarBtn')
+    .addEventListener('click', downloadInviteCalendar)
 
   const updateBtn = document.getElementById('updateBtn')
   const picker = attachPicker(invitee, updateBtn, downloadPdfBtn)
