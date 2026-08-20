@@ -329,7 +329,8 @@
       .banner,
       .step-dots,
       .step-wizard,
-      .term-nav {
+      .term-nav,
+      .rsvp-box {
         transition: opacity 0.35s ease;
       }
 
@@ -455,6 +456,10 @@
         gap: 8px;
       }
 
+      .step-dots[hidden] {
+        display: none;
+      }
+
       .step-dot {
         width: 12px;
         height: 12px;
@@ -484,6 +489,10 @@
         display: flex;
         flex-direction: column;
         perspective: 1600px;
+      }
+
+      .step-wizard[hidden] {
+        display: none;
       }
 
       /* TIGER REVEAL: shown in the wizard's place right before its content appears */
@@ -1076,6 +1085,10 @@
         align-items: center;
         justify-content: space-between;
         gap: 10px;
+      }
+
+      .term-nav[hidden] {
+        display: none;
       }
 
       .term-nav-btn {

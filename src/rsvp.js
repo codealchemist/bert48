@@ -304,14 +304,17 @@ function announceInvitee(name) {
   document.dispatchEvent(new CustomEvent('invitee:ready', { detail: { name } }))
 }
 
-// No invitee to walk through steps for, so skip the wizard entirely and
-// show only the RSVP box, repurposed as an error message.
+// No invitee to walk through steps for, so hide the wizard/dots/nav entirely
+// and pull the RSVP box out of the (now hidden) wizard to stand on its own.
+// The banner stays visible.
 function showRsvpOnly() {
   document.getElementById('stepDots').hidden = true
+  document.querySelector('.step-wizard').hidden = true
   document.querySelector('.term-nav').hidden = true
-  document.querySelectorAll('.step-wizard > .step').forEach(step => {
-    step.classList.toggle('active', step.dataset.step === '4')
-  })
+  // welcome.js reveals it (with a delay after the banner) once the boot
+  // sequence finishes, instead of popping in immediately.
+  rsvpBox.classList.add('reveal-hidden')
+  document.querySelector('.term-content').appendChild(rsvpBox)
 }
 
 function renderNoGuid() {

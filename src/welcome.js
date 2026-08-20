@@ -7,6 +7,15 @@ const SECTION_SELECTORS = [
   '.term-nav'
 ]
 
+// No invitee to walk through steps for: the wizard/dots/nav are hidden
+// outright (see rsvp.js), so reveal the standalone error box instead.
+const SECTION_SELECTORS_NO_GUID = [
+  '.term-bar',
+  '#inviteeGreeting',
+  '.banner',
+  '#rsvpBox'
+]
+
 const TIGER_DELAY_MS_DEFAULT = 1000
 
 const terminal = document.querySelector('.terminal')
@@ -30,9 +39,11 @@ async function revealSections() {
   if (!terminal) return
 
   const delay = Number(terminal.dataset.revealDelay) || 350
-  const sections = SECTION_SELECTORS.map(sel =>
-    terminal.querySelector(sel)
-  ).filter(Boolean)
+  const stepWizard = terminal.querySelector('.step-wizard')
+  const selectors = stepWizard?.hidden
+    ? SECTION_SELECTORS_NO_GUID
+    : SECTION_SELECTORS
+  const sections = selectors.map(sel => terminal.querySelector(sel)).filter(Boolean)
 
   for (const section of sections) {
     if (section.classList.contains('step-wizard')) {
