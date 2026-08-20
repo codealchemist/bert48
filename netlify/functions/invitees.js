@@ -1,10 +1,33 @@
 import { getInviteesStore, requireAdmin, jsonResponse } from './lib/store.js';
 
-export default async (request) => {
+export default async (request, context) => {
   const unauthorized = requireAdmin(request);
   if (unauthorized) return unauthorized;
 
   const store = getInviteesStore();
+  const { id } = context.params;
+
+  if (request.method === 'DELETE') {
+    if (!id) return jsonResponse({ error: 'Falta el id del invitado' }, 400);
+    await store.delete(id);
+    return jsonResponse({ ok: true });
+  }
+
+  if (request.method === 'PATCH') {
+    if (!id) return jsonResponse({ error: 'Falta el id del invitado' }, 400);
+    const body = await request.json().catch(() => ({}));
+    if (!('alias' in body)) {
+      return jsonResponse({ error: 'Falta el alias' }, 400);
+    }
+
+    const invitee = await store.get(id, { type: 'json' });
+    if (!invitee) return jsonResponse({ error: 'Invitado no encontrado' }, 404);
+
+    invitee.alias = (body.alias || '').trim();
+    invitee.updatedAt = new Date().toISOString();
+    await store.setJSON(id, invitee);
+    return jsonResponse(invitee);
+  }
 
   if (request.method === 'GET') {
     const { blobs } = await store.list();
@@ -26,8 +49,9 @@ export default async (request) => {
     const invitee = {
       id: crypto.randomUUID(),
       name,
+      alias: null,
       status: 'pending',
-      menuPreference: null,
+      menuPreferences: [],
       guestCount: 0,
       createdAt: now,
       updatedAt: now,
@@ -41,5 +65,5 @@ export default async (request) => {
 };
 
 export const config = {
-  path: '/api/invitees',
+  path: ['/api/invitees', '/api/invitees/:id'],
 };

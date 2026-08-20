@@ -1,10 +1,24 @@
 import { getInviteesStore, jsonResponse } from './lib/store.js';
 
 const VALID_MENU_PREFERENCES = ['tradicional', 'veggie', 'sin-gluten', 'keto'];
-const MAX_GUEST_COUNT = 20;
+const MAX_GUEST_COUNT = 4;
 
 function isValidGuestCount(value) {
   return Number.isInteger(value) && value >= 0 && value <= MAX_GUEST_COUNT;
+}
+
+function isValidMenuPreferences(value, guestCount) {
+  return (
+    Array.isArray(value) &&
+    value.length === guestCount + 1 &&
+    value.every((pref) => VALID_MENU_PREFERENCES.includes(pref))
+  );
+}
+
+// The alias is an admin-only note and must never reach the invitee's browser.
+function toPublicInvitee(invitee) {
+  const { alias, ...publicInvitee } = invitee;
+  return publicInvitee;
 }
 
 export default async (request, context) => {
@@ -17,21 +31,21 @@ export default async (request, context) => {
   }
 
   if (request.method === 'GET') {
-    return jsonResponse(invitee);
+    return jsonResponse(toPublicInvitee(invitee));
   }
 
   if (request.method === 'POST') {
     const body = await request.json().catch(() => ({}));
 
     if (body.action === 'confirm') {
-      if (!VALID_MENU_PREFERENCES.includes(body.menuPreference)) {
-        return jsonResponse({ error: 'Preferencia de menú inválida' }, 400);
-      }
       if (!isValidGuestCount(body.guestCount)) {
         return jsonResponse({ error: 'Cantidad de acompañantes inválida' }, 400);
       }
+      if (!isValidMenuPreferences(body.menuPreferences, body.guestCount)) {
+        return jsonResponse({ error: 'Preferencia de menú inválida' }, 400);
+      }
       invitee.status = 'confirmed';
-      invitee.menuPreference = body.menuPreference;
+      invitee.menuPreferences = body.menuPreferences;
       invitee.guestCount = body.guestCount;
     } else if (body.action === 'cancel') {
       invitee.status = 'cancelled';
@@ -41,7 +55,7 @@ export default async (request, context) => {
 
     invitee.updatedAt = new Date().toISOString();
     await store.setJSON(guid, invitee);
-    return jsonResponse(invitee);
+    return jsonResponse(toPublicInvitee(invitee));
   }
 
   return jsonResponse({ error: 'Método no permitido' }, 405);

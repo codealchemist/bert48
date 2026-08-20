@@ -1,7 +1,9 @@
 import { getStore } from '@netlify/blobs';
 
 export function getInviteesStore() {
-  return getStore('invitees');
+  // Default (eventual) consistency can leave store.list() lagging behind a
+  // just-written blob indefinitely; the admin list needs to see writes right away.
+  return getStore({ name: 'invitees', consistency: 'strong' });
 }
 
 export function requireAdmin(request) {
