@@ -167,16 +167,12 @@
         background: var(--bg-panel);
       }
 
-      .term-dots {
-        display: flex;
-        gap: 6px;
-      }
-
-      .term-dots i {
-        width: 9px;
-        height: 9px;
-        border: 1px solid var(--green-dim);
-        background: transparent;
+      .term-prompt-icon {
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--green);
+        text-shadow: var(--glow);
       }
 
       .term-title {
@@ -604,7 +600,7 @@
     <div class="crt-overlay"></div>
     <div class="terminal">
       <header class="term-bar">
-        <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="term-prompt-icon" aria-hidden="true">&gt;</span>
         <span class="term-title"
           >ADMIN://INVITADOS<span class="cursor">▋</span></span
         >

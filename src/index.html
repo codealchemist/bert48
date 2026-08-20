@@ -16,7 +16,10 @@
       property="og:description"
       content="Sábado 29 de agosto desde las 19hs. Amigos, hamburguesas y música en vivo. ¡Confirmá tu asistencia!"
     />
-    <meta property="og:image" content="https://bert48.netlify.app/og-image.png" />
+    <meta
+      property="og:image"
+      content="https://bert48.netlify.app/og-image.png"
+    />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="es_AR" />
@@ -27,7 +30,10 @@
       name="twitter:description"
       content="Sábado 29 de agosto desde las 19hs. Amigos, hamburguesas y música en vivo. ¡Confirmá tu asistencia!"
     />
-    <meta name="twitter:image" content="https://bert48.netlify.app/og-image.png" />
+    <meta
+      name="twitter:image"
+      content="https://bert48.netlify.app/og-image.png"
+    />
     <script>
       ;(function () {
         if (localStorage.getItem('theme') === 'amber') {
@@ -347,16 +353,12 @@
         background: var(--bg-panel);
       }
 
-      .term-dots {
-        display: flex;
-        gap: 6px;
-      }
-
-      .term-dots i {
-        width: 9px;
-        height: 9px;
-        border: 1px solid var(--green-dim);
-        background: transparent;
+      .term-prompt-icon {
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--green);
+        text-shadow: var(--glow);
       }
 
       .term-title {
@@ -1231,9 +1233,9 @@
     <div class="crt-overlay"></div>
     <div class="terminal" data-reveal-delay="500">
       <header class="term-bar reveal-hidden">
-        <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="term-prompt-icon" aria-hidden="true">&gt;</span>
         <span class="term-title"
-          >BERT48://INVITACION<span id="appVersion"></span
+          >BERT48://INVITE<span id="appVersion"></span
           ><span class="cursor">▋</span></span
         >
         <button
