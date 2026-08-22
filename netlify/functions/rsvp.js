@@ -1,6 +1,6 @@
 import { getInviteesStore, jsonResponse } from './lib/store.js';
 
-const VALID_MENU_PREFERENCES = ['tradicional', 'veggie', 'sin-gluten', 'keto'];
+const VALID_MENU_PREFERENCES = ['tradicional', 'veggie', 'sin-gluten'];
 const MAX_GUEST_COUNT = 4;
 
 function isValidGuestCount(value) {

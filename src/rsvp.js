@@ -231,13 +231,16 @@ function buildPeoplePicker({
     menuBtns.forEach((btn, i) => {
       const enabled = selectedCount !== null && i <= selectedCount
       const pref = menuPrefs[i]
+      const validPref = MENU_VALUES.includes(pref)
       btn.disabled = !enabled
-      btn.classList.toggle('done', Boolean(pref))
+      btn.classList.toggle('done', validPref)
       btn.classList.toggle('link-active', i === activePerson)
-      btn.innerHTML = pref ? `<i class="fi ${MENU_ICONS[pref]}"></i>` : 'Menu?'
+      btn.innerHTML = validPref
+        ? `<i class="fi ${MENU_ICONS[pref]}"></i>`
+        : 'Menu?'
       btn.setAttribute(
         'aria-label',
-        pref
+        validPref
           ? `Menú ${menuOwnershipLabel(i)}: ${MENU_LABELS[pref]}`
           : `Elegir menú para ${personLabel(i)}`
       )

@@ -1,20 +1,18 @@
 export const MENU_LABELS = {
   tradicional: 'Tradicional',
   veggie: 'Veggie',
-  'sin-gluten': 'Sin Gluten',
-  keto: 'Keto'
+  'sin-gluten': 'Sin Gluten'
 }
 
 export const MENU_ICONS = {
   tradicional: 'fi-rr-drumstick',
   veggie: 'fi-rr-salad',
-  'sin-gluten': 'fi-rr-wheat-slash',
-  keto: 'fi-rr-avocado'
+  'sin-gluten': 'fi-rr-wheat-slash'
 }
 
 export const EVENT_TITLE = 'BERT48 INVITE'
 export const EVENT_SUMMARY = 'Cumple Bert 48'
-export const EVENT_DESCRIPTION = 'Amigos, hamburguesas y música en vivo.'
+export const EVENT_DESCRIPTION = 'Amigos y música en vivo.'
 export const EVENT_DATE = 'Sábado 29 de agosto de 2026'
 export const EVENT_TIME = '19:00 hs'
 export const EVENT_LOCATION =
