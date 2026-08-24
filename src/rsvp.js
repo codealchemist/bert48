@@ -269,15 +269,25 @@ function buildPeoplePicker({
     if (selectedCount === null) {
       return { complete: false, message: 'Elegí cuántas personas vienen.' }
     }
-    const missingNames = []
+    const missingIndexes = []
     for (let i = 0; i <= selectedCount; i++) {
-      if (!MENU_VALUES.includes(menuPrefs[i])) missingNames.push(personLabel(i))
+      if (!MENU_VALUES.includes(menuPrefs[i])) missingIndexes.push(i)
     }
-    if (missingNames.length) {
-      return {
-        complete: false,
-        message: `Falta elegir el menú de: ${missingNames.join(', ')}.`
+    if (missingIndexes.length) {
+      const missesSelf = missingIndexes.includes(0)
+      const otherNames = missingIndexes
+        .filter(i => i !== 0)
+        .map(personLabel)
+
+      let message
+      if (missesSelf && otherNames.length) {
+        message = `Falta elegir tu menú y el de: ${otherNames.join(', ')}.`
+      } else if (missesSelf) {
+        message = 'Falta elegir tu menú.'
+      } else {
+        message = `Falta elegir el menú de: ${otherNames.join(', ')}.`
       }
+      return { complete: false, message }
     }
     return { complete: true, message: '' }
   }
@@ -395,17 +405,25 @@ function renderPending(invitee, guid, { flash = false } = {}) {
   setRsvpStatus(status)
   if (flash) flashRsvpBox(status)
 
+  const declinedBadge =
+    status === 'cancelled'
+      ? '<div class="rsvp-declined-badge"><i class="fi fi-rr-cross-circle"></i> AVISASTE QUE NO PODÉS VENIR</div>'
+      : ''
+
   content.innerHTML = `
+    ${declinedBadge}
     <div class="form-group">
       <label>¿Cuántas personas vienen, vos incluído/a?</label>
       <div id="peoplePickerHost"></div>
     </div>
     <button type="button" class="btn-submit" id="confirmBtn" disabled>CONFIRMAR ASISTENCIA</button>
+    <button type="button" class="btn-cancel" id="declineBtn">NO PUEDO ASISTIR</button>
     <div class="confirm-hint" id="confirmHint"></div>
     <div class="rsvp-message" id="actionError"></div>
   `
 
   const confirmBtn = document.getElementById('confirmBtn')
+  const declineBtn = document.getElementById('declineBtn')
   const picker = attachPicker(invitee, confirmBtn)
 
   confirmBtn.addEventListener('click', async () => {
@@ -432,6 +450,32 @@ function renderPending(invitee, guid, { flash = false } = {}) {
     } catch {
       errorEl.textContent =
         'No pudimos confirmar tu asistencia. Probá de nuevo.'
+    }
+  })
+
+  declineBtn.addEventListener('click', async () => {
+    const errorEl = document.getElementById('actionError')
+    errorEl.textContent = ''
+    declineBtn.disabled = true
+
+    try {
+      const response = await fetch(`/api/rsvp/${guid}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'cancel' })
+      })
+
+      if (!response.ok) {
+        errorEl.textContent = 'No pudimos guardar tu respuesta. Probá de nuevo.'
+        declineBtn.disabled = false
+        return
+      }
+
+      const updated = await response.json()
+      renderPending(updated, guid, { flash: true })
+    } catch {
+      errorEl.textContent = 'No pudimos guardar tu respuesta. Probá de nuevo.'
+      declineBtn.disabled = false
     }
   })
 }
