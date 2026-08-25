@@ -49,6 +49,14 @@ export default async (request, context) => {
       invitee.guestCount = body.guestCount;
     } else if (body.action === 'cancel') {
       invitee.status = 'cancelled';
+    } else if (body.action === 'restore') {
+      if (invitee.status !== 'cancelled') {
+        return jsonResponse({ error: 'La invitación no está cancelada' }, 400);
+      }
+      const hadConfirmedData =
+        isValidGuestCount(invitee.guestCount) &&
+        isValidMenuPreferences(invitee.menuPreferences, invitee.guestCount);
+      invitee.status = hadConfirmedData ? 'confirmed' : 'pending';
     } else {
       return jsonResponse({ error: 'Acción inválida' }, 400);
     }

@@ -7,6 +7,14 @@ const rsvpBox = document.getElementById('rsvpBox')
 const rsvpTitle = document.getElementById('rsvpTitle')
 const stamp = document.getElementById('rsvpStamp')
 
+const terminalEl = document.querySelector('.terminal')
+const cancelOverlay = document.getElementById('cancelOverlay')
+const cancelOverlayName = document.getElementById('cancelOverlayName')
+const cancelOverlayRetryBtn = document.getElementById('cancelOverlayRetryBtn')
+const cancelOverlayError = document.getElementById('cancelOverlayError')
+
+let currentGuid = null
+
 const MAX_GUESTS = 4
 const MENU_VALUES = Object.keys(MENU_LABELS)
 
@@ -91,6 +99,61 @@ function burstConfetti() {
       .finally(() => piece.remove())
   }
 }
+
+function showCancelOverlay(name) {
+  if (!cancelOverlay) return
+  cancelOverlayName.textContent = name || ''
+  cancelOverlay.hidden = false
+  cancelOverlay.setAttribute('aria-hidden', 'false')
+  document.body.classList.add('cancel-active')
+  if (terminalEl) terminalEl.inert = true
+}
+
+function hideCancelOverlay() {
+  if (!cancelOverlay) return
+  cancelOverlay.hidden = true
+  cancelOverlay.setAttribute('aria-hidden', 'true')
+  document.body.classList.remove('cancel-active')
+  if (terminalEl) terminalEl.inert = false
+}
+
+async function retryFromCancel() {
+  if (!currentGuid) {
+    hideCancelOverlay()
+    return
+  }
+
+  cancelOverlayRetryBtn.disabled = true
+  cancelOverlayError.hidden = true
+  cancelOverlayError.textContent = ''
+
+  try {
+    const response = await fetch(`/api/rsvp/${currentGuid}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'restore' })
+    })
+
+    if (!response.ok) {
+      cancelOverlayError.textContent =
+        'No pudimos deshacer la cancelación. Probá de nuevo.'
+      cancelOverlayError.hidden = false
+      return
+    }
+
+    const updated = await response.json()
+    setRsvpStatus(updated.status === 'confirmed' ? 'confirmed' : 'pending')
+    hideCancelOverlay()
+  } catch {
+    cancelOverlayError.textContent =
+      'No pudimos deshacer la cancelación. Probá de nuevo.'
+    cancelOverlayError.hidden = false
+  } finally {
+    cancelOverlayRetryBtn.disabled = false
+  }
+}
+
+cancelOverlayRetryBtn?.addEventListener('click', retryFromCancel)
 
 function personLabel(index) {
   return index === 0 ? 'Vos' : `Acompañante ${index}`
@@ -405,6 +468,12 @@ function renderPending(invitee, guid, { flash = false } = {}) {
   setRsvpStatus(status)
   if (flash) flashRsvpBox(status)
 
+  if (status === 'cancelled') {
+    showCancelOverlay(invitee.name)
+  } else {
+    hideCancelOverlay()
+  }
+
   const declinedBadge =
     status === 'cancelled'
       ? '<div class="rsvp-declined-badge"><i class="fi fi-rr-cross-circle"></i> AVISASTE QUE NO PODÉS VENIR</div>'
@@ -472,7 +541,10 @@ function renderPending(invitee, guid, { flash = false } = {}) {
       }
 
       const updated = await response.json()
-      renderPending(updated, guid, { flash: true })
+      setRsvpStatus('cancelled')
+      flashRsvpBox('cancelled')
+      showCancelOverlay(updated.name)
+      declineBtn.disabled = false
     } catch {
       errorEl.textContent = 'No pudimos guardar tu respuesta. Probá de nuevo.'
       declineBtn.disabled = false
@@ -485,6 +557,7 @@ function renderConfirmed(
   guid,
   { flash = false, confetti = false } = {}
 ) {
+  hideCancelOverlay()
   setRsvpStatus('confirmed')
   if (flash) flashRsvpBox('confirmed')
   if (confetti) burstConfetti()
@@ -572,7 +645,9 @@ function renderConfirmed(
       }
 
       const updated = await response.json()
-      renderPending(updated, guid, { flash: true })
+      setRsvpStatus('cancelled')
+      flashRsvpBox('cancelled')
+      showCancelOverlay(updated.name)
     } catch {
       errorEl.textContent = 'No pudimos cancelar tu asistencia. Probá de nuevo.'
     }
@@ -593,6 +668,8 @@ async function init() {
     announceInvitee(null)
     return
   }
+
+  currentGuid = guid
 
   try {
     const response = await fetch(`/api/rsvp/${guid}`)

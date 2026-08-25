@@ -320,6 +320,73 @@
         text-shadow: var(--glow);
       }
 
+      /* CANCEL OVERLAY: shown when the invitee's RSVP is cancelled */
+      .cancel-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(0, 0, 0, 0.88);
+        backdrop-filter: blur(2px);
+      }
+
+      .cancel-overlay[hidden] {
+        display: none;
+      }
+
+      .cancel-overlay-box {
+        max-width: 420px;
+        width: 100%;
+        text-align: center;
+        border: 2px solid var(--red);
+        box-shadow: 0 0 24px rgba(255, 92, 92, 0.4);
+        background: var(--bg);
+        padding: clamp(24px, 5vw, 40px) clamp(20px, 4vw, 32px);
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+      }
+
+      .cancel-overlay-title {
+        font-family: 'VT323', monospace;
+        font-size: clamp(1.6rem, 6vw, 2.4rem);
+        color: var(--green-bright);
+        text-shadow: var(--glow);
+        letter-spacing: 1px;
+        margin-bottom: 14px;
+      }
+
+      .cancel-overlay-message {
+        color: var(--red);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 22px;
+      }
+
+      .cancel-overlay-retry {
+        width: auto;
+        min-width: 140px;
+        margin: 0 auto;
+      }
+
+      .cancel-overlay-error {
+        color: var(--red);
+        font-size: 0.8rem;
+        margin-top: 12px;
+      }
+
+      .cancel-overlay-error[hidden] {
+        display: none;
+      }
+
+      body.cancel-active .terminal,
+      body.cancel-active .crt-overlay {
+        filter: grayscale(1) contrast(0.7) blur(1px);
+        pointer-events: none;
+        user-select: none;
+      }
+
       /* SHELL: fills the whole viewport */
       .terminal {
         display: flex;
@@ -1234,6 +1301,21 @@
     >
       <span id="matrixText" class="matrix-text"></span
       ><span id="matrixCursor" class="cursor matrix-cursor">▋</span>
+    </div>
+
+    <div id="cancelOverlay" class="cancel-overlay" hidden aria-hidden="true">
+      <div class="cancel-overlay-box">
+        <p class="cancel-overlay-title">
+          The Matrix has you <span id="cancelOverlayName"></span>!
+        </p>
+        <p class="cancel-overlay-message">
+          Cancelaste tu asistencia al evento. Espero verte el año que viene!
+        </p>
+        <button type="button" id="cancelOverlayRetryBtn" class="btn-cancel cancel-overlay-retry">
+          Retry
+        </button>
+        <p class="cancel-overlay-error" id="cancelOverlayError" hidden></p>
+      </div>
     </div>
 
     <div class="crt-overlay"></div>
