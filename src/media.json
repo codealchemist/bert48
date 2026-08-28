@@ -1,0 +1,98 @@
+[
+  {
+    "index": 0,
+    "name": "Bert, clavada al ángulo",
+    "desc": "Hubo una época en la que clavarla al ángulo era fácil",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/01-1546-gol-albert.mp4",
+    "filename": "01-1546-gol-albert.mov",
+    "type": "video"
+  },
+  {
+    "index": 1,
+    "name": "Caño a Diegotte",
+    "desc": "Un video dedicado a mi amigo Diegotte que no vino",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/02-3553-cano-gol-albert.mp4",
+    "filename": "02-3553-caño-gol-albert.mov",
+    "type": "video"
+  },
+  {
+    "index": 2,
+    "name": "Golazo Seba",
+    "desc": "Dedicado a mi amigo Seba, el habilidoso",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/03-img-6064.mp4",
+    "filename": "03-IMG_6064.MOV",
+    "type": "video"
+  },
+  {
+    "index": 3,
+    "name": "Pelotazo a Seba",
+    "desc": "Era muy habilidoso, había que controlarlo",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/04-0741-pelotazo-a-seba.mp4",
+    "filename": "04-0741-pelotazo-a-seba.mov",
+    "type": "video"
+  },
+  {
+    "index": 4,
+    "name": "Gol taco Fer",
+    "desc": "Otro habilidoso, mi amigo Fernando",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/05-img-6262.mp4",
+    "filename": "05-IMG_6262.MOV",
+    "type": "video"
+  },
+  {
+    "index": 5,
+    "name": "Me traba Fer, caída heroica",
+    "desc": "Era jodido Fernando también!",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/06-img-6465.mp4",
+    "filename": "06-IMG_6465.MOV",
+    "type": "video"
+  },
+  {
+    "index": 6,
+    "name": "Caño a Fer",
+    "desc": "Por eso, tuve que ponerle los puntos",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/07-img-6250.mp4",
+    "filename": "07-IMG_6250.MOV",
+    "type": "video"
+  },
+  {
+    "index": 7,
+    "name": "Fer me deja pasar y gol",
+    "desc": "Ahí, tranquilito, nos entendimos.",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/08-img-6268.mp4",
+    "filename": "08-IMG_6268.MOV",
+    "type": "video"
+  },
+  {
+    "index": 8,
+    "name": "Fer, WTF?",
+    "desc": "Acá ya no se qué pasó.",
+    "url": "https://res.cloudinary.com/instabuddy/image/upload/c_limit,f_auto,q_auto,w_1080/v1/bert48/party-2026/09-img-6062-1",
+    "filename": "09-IMG_6062 1.JPG",
+    "type": "image"
+  },
+  {
+    "index": 9,
+    "name": "",
+    "desc": "",
+    "url": "https://res.cloudinary.com/instabuddy/image/upload/c_limit,f_auto,q_auto,w_1080/v1/bert48/party-2026/img-1847",
+    "filename": "IMG_1847.JPG",
+    "type": "image"
+  },
+  {
+    "index": 10,
+    "name": "",
+    "desc": "",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/mah08678.mp4",
+    "filename": "MAH08678.MP4",
+    "type": "video"
+  },
+  {
+    "index": 11,
+    "name": "",
+    "desc": "",
+    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/vid-20110825-111340.mp4",
+    "filename": "VID_20110825_111340.mp4",
+    "type": "video"
+  }
+]

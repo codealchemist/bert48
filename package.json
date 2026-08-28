@@ -8,15 +8,19 @@
     "dev:netlify": "netlify dev",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && netlify deploy --prod"
+    "deploy": "npm run build && netlify deploy --prod",
+    "media:upload": "node scripts/upload-media.mjs"
   },
   "dependencies": {
     "@flaticon/flaticon-uicons": "^3.3.1",
     "@netlify/blobs": "^10.7.13",
+    "@simplewebauthn/browser": "^13.3.0",
+    "@simplewebauthn/server": "^13.3.3",
     "jspdf": "^4.2.1",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
+    "cloudinary": "^2.10.1",
     "netlify-cli": "^22.2.2",
     "vite": "^7.3.6"
   }

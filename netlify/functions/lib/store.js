@@ -6,11 +6,22 @@ export function getInviteesStore() {
   return getStore({ name: 'invitees', consistency: 'strong' });
 }
 
-export function requireAdmin(request) {
+export function getControlStore() {
+  return getStore({ name: 'control', consistency: 'strong' });
+}
+
+export function getPasskeyStore() {
+  return getStore({ name: 'passkeys', consistency: 'strong' });
+}
+
+export function isAdminRequest(request) {
   const auth = request.headers.get('authorization') || '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+  return Boolean(process.env.ADMIN_PASSWORD) && token === process.env.ADMIN_PASSWORD;
+}
 
-  if (!process.env.ADMIN_PASSWORD || token !== process.env.ADMIN_PASSWORD) {
+export function requireAdmin(request) {
+  if (!isAdminRequest(request)) {
     return new Response(JSON.stringify({ error: 'No autorizado' }), {
       status: 401,
       headers: { 'content-type': 'application/json' },

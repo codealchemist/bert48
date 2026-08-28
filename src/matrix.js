@@ -36,7 +36,7 @@ function playKeySound() {
   }
 }
 
-function waitForInviteeName() {
+export function waitForInviteeName() {
   // rsvp.js may announce synchronously (no-guid path) before this listener
   // attaches, so check its cached value first instead of only listening.
   if (Object.prototype.hasOwnProperty.call(window, '__inviteeName')) {
@@ -58,30 +58,52 @@ function waitForInviteeName() {
   })
 }
 
-function resolveLine(template, name) {
+export function resolveLine(template, name) {
+  if (name) return template.replace(/\{name\}/g, name)
+  // No name: drop the placeholder together with any space right before it,
+  // so "you {name}..." collapses to "you..." instead of leaving "you ...".
   return template
-    .replace(/\{name\}/g, name || '')
+    .replace(/\s*\{name\}/g, '')
     .replace(/\s{2,}/g, ' ')
     .trim()
 }
 
-async function typeText(str) {
-  textEl.textContent = ''
+// Reusable typewriter effect — types `str` into `el` one character at a
+// time with the same key-click sound as the boot sequence. Pass `shouldStop`
+// to let a caller cancel a run already in progress (checked between every
+// character); other callers can ignore it.
+export async function typeText(el, str, { charDelayMs = CHAR_DELAY_MS, shouldStop = () => false } = {}) {
+  el.textContent = ''
   for (const char of str) {
-    textEl.textContent += char
+    if (shouldStop()) return
+    el.textContent += char
     playKeySound()
-    await wait(CHAR_DELAY_MS)
+    await wait(charDelayMs)
   }
+}
+
+let cancelled = false
+
+// Lets another takeover (e.g. Control mode) interrupt the boot sequence
+// instead of letting it keep typing/clicking silently underneath.
+export function stopMatrixSequence() {
+  if (cancelled) return
+  cancelled = true
+  audioCtx?.close()
+  overlay?.remove()
 }
 
 async function runMatrixSequence() {
   overlay.hidden = false
 
   const name = await waitForInviteeName()
+  if (cancelled) return
 
   for (const line of MATRIX_LINES) {
-    await typeText(resolveLine(line, name))
+    await typeText(textEl, resolveLine(line, name), { shouldStop: () => cancelled })
+    if (cancelled) return
     await wait(HOLD_DELAY_MS)
+    if (cancelled) return
   }
 
   overlay.classList.add('matrix-view-hidden')

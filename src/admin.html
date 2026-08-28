@@ -311,10 +311,15 @@
         padding: 20px;
       }
 
+      .table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-top: 8px;
+      }
+
       .invitee-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 8px;
         font-size: 0.85rem;
       }
 
@@ -326,12 +331,14 @@
         color: var(--green-dim);
         border-bottom: 1px solid var(--green-dim);
         padding: 8px 6px;
+        white-space: nowrap;
       }
 
       .invitee-table td {
         padding: 10px 6px;
         border-bottom: 1px dashed var(--green-dim);
         vertical-align: middle;
+        white-space: nowrap;
       }
 
       .status-badge {
@@ -358,6 +365,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
+        max-width: 160px;
       }
 
       input.alias-input {
@@ -375,7 +383,10 @@
       }
 
       .link-cell code {
-        overflow-wrap: anywhere;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
         color: var(--green-dim);
         font-size: 0.8rem;
       }
@@ -586,7 +597,169 @@
         box-shadow: var(--glow);
       }
 
+      .admin-nav {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .admin-nav-btn {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .admin-nav-btn.active {
+        border-color: var(--green);
+        color: var(--green-bright);
+        box-shadow: var(--glow);
+      }
+
+      #invitadosSection[hidden],
+      #controlSection[hidden] {
+        display: none;
+      }
+
+      .passkey-login-btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 8px;
+      }
+
+      .passkey-login-btn[hidden] {
+        display: none;
+      }
+
+      .passkey-panel {
+        padding-bottom: 16px;
+        margin-bottom: 16px;
+        border-bottom: 1px dashed var(--green-dim);
+      }
+
+      .account-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      .passkey-btn {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .passkey-btn[hidden] {
+        display: none;
+      }
+
+      .passkey-btn.registered {
+        color: var(--red);
+        border-color: var(--red);
+      }
+
+      .passkey-btn.registered:hover {
+        border-color: var(--red);
+        color: var(--red);
+        box-shadow: 0 0 10px rgba(255, 92, 92, 0.4);
+      }
+
+      .icon-btn {
+        padding: 9px 12px;
+      }
+
+      .control-toolbar {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .control-toolbar[hidden] {
+        display: none;
+      }
+
+      #disconnectBtn {
+        margin-left: auto;
+      }
+
+      .control-preview-media {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        border: 1px solid var(--green-dim);
+        max-height: 320px;
+        overflow: hidden;
+        margin-bottom: 8px;
+      }
+
+      .control-preview-media img,
+      .control-preview-media video {
+        max-width: 100%;
+        max-height: 320px;
+        display: block;
+      }
+
+      .control-preview-name {
+        font-size: 1.2rem;
+        color: var(--green-bright);
+      }
+
+      .control-preview-desc {
+        font-size: 1.2rem;
+        color: var(--green-dim);
+        margin-bottom: 14px;
+      }
+
+      #controlPreview[hidden] {
+        display: none;
+      }
+
+      .media-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border: 1px solid var(--green-dim);
+        position: relative;
+        max-height: min(360px, 45vh);
+        overflow-y: auto;
+        scroll-behavior: smooth;
+      }
+
+      .media-list-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--green-dim);
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
+
+      .media-list-item:last-child {
+        border-bottom: none;
+      }
+
+      .media-list-item.current {
+        background: var(--bg-input);
+        color: var(--green-bright);
+      }
+
+      .media-list-index {
+        color: var(--green-dim);
+        min-width: 2ch;
+      }
+
+      .media-list-name {
+        flex: 1;
+      }
+
+      .media-list-desc {
+        color: var(--green-dim);
+        font-size: 0.8rem;
+      }
+
       @media (max-width: 640px) {
+        .media-list-desc {
+          display: none;
+        }
         .summary-stats {
           grid-template-columns: repeat(2, 1fr);
         }
@@ -617,7 +790,7 @@
 
       <main class="term-body">
         <div class="term-content">
-          <h1><i class="fi fi-rr-users-alt"></i> Admin · Invitados</h1>
+          <h1><i class="fi fi-rr-terminal"></i> Admin</h1>
 
           <div id="loginView">
             <div class="field-row">
@@ -628,99 +801,198 @@
               />
               <button type="button" id="loginBtn">Ingresar</button>
             </div>
+            <button
+              type="button"
+              id="passkeyLoginBtn"
+              class="passkey-login-btn"
+              hidden
+            >
+              <i class="fi fi-rr-fingerprint"></i> Ingresar con passkey
+            </button>
             <div class="error-msg" id="loginError"></div>
           </div>
 
           <div id="panelView" hidden>
-            <form id="createForm" class="field-row">
-              <input
-                type="text"
-                id="nameInput"
-                placeholder="Nombre y apellido del invitado"
-                required
-              />
-              <button type="submit">
-                <i class="fi fi-rr-user-add"></i> Generar invitación
+            <nav class="admin-nav">
+              <button
+                type="button"
+                class="admin-nav-btn"
+                id="navInvitados"
+                data-section="invitados"
+              >
+                <i class="fi fi-rr-users-alt"></i> Invitados
               </button>
-            </form>
-            <div class="error-msg" id="createError"></div>
+              <button
+                type="button"
+                class="admin-nav-btn"
+                id="navControl"
+                data-section="control"
+              >
+                <i class="fi fi-rr-clapperboard-play"></i> Control
+              </button>
+            </nav>
 
-            <div class="summary-panel">
-              <div class="hero-stat">
-                <span class="hero-value" id="totalPeopleValue">0</span>
-                <span class="hero-label"
-                  ><i class="fi fi-rr-users-alt"></i> Personas confirmadas
-                  (invitados + acompañantes)</span
-                >
-              </div>
-              <div class="summary-stats">
+            <div class="passkey-panel">
+              <div class="account-row">
                 <button
                   type="button"
-                  class="stat stat-filter"
-                  data-filter="status:total"
+                  id="passkeyBtn"
+                  class="passkey-btn"
+                  hidden
                 >
-                  <span class="stat-value" id="statTotal">0</span>
-                  <span class="stat-label">Invitados</span>
+                  <i class="fi fi-rr-fingerprint"></i>
+                  <span id="passkeyBtnLabel">Agregar passkey</span>
                 </button>
                 <button
                   type="button"
-                  class="stat stat-filter status-pending"
-                  data-filter="status:pending"
+                  id="logoutBtn"
+                  class="icon-btn"
+                  aria-label="Cerrar sesión"
                 >
-                  <span class="stat-value" id="statPending">0</span>
-                  <span class="stat-label">Pendientes</span>
-                </button>
-                <button
-                  type="button"
-                  class="stat stat-filter status-confirmed"
-                  data-filter="status:confirmed"
-                >
-                  <span class="stat-value" id="statConfirmed">0</span>
-                  <span class="stat-label">Confirmaron</span>
-                </button>
-                <button
-                  type="button"
-                  class="stat stat-filter status-cancelled"
-                  data-filter="status:cancelled"
-                >
-                  <span class="stat-value" id="statCancelled">0</span>
-                  <span class="stat-label">Cancelaron</span>
+                  <i class="fi fi-rr-sign-out-alt"></i>
                 </button>
               </div>
-              <div class="menu-stats" id="menuBreakdown"></div>
-              <div class="export-row">
-                <button type="button" id="exportBtn">
-                  <i class="fi fi-rr-file-export"></i> Exportar CSV
+              <div class="error-msg" id="passkeyError"></div>
+            </div>
+
+            <section id="invitadosSection">
+              <form id="createForm" class="field-row">
+                <input
+                  type="text"
+                  id="nameInput"
+                  placeholder="Nombre y apellido del invitado"
+                  required
+                />
+                <button type="submit">
+                  <i class="fi fi-rr-user-add"></i> Generar invitación
                 </button>
+              </form>
+              <div class="error-msg" id="createError"></div>
+
+              <div class="summary-panel">
+                <div class="hero-stat">
+                  <span class="hero-value" id="totalPeopleValue">0</span>
+                  <span class="hero-label"
+                    ><i class="fi fi-rr-users-alt"></i> Personas confirmadas
+                    (invitados + acompañantes)</span
+                  >
+                </div>
+                <div class="summary-stats">
+                  <button
+                    type="button"
+                    class="stat stat-filter"
+                    data-filter="status:total"
+                  >
+                    <span class="stat-value" id="statTotal">0</span>
+                    <span class="stat-label">Invitados</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="stat stat-filter status-pending"
+                    data-filter="status:pending"
+                  >
+                    <span class="stat-value" id="statPending">0</span>
+                    <span class="stat-label">Pendientes</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="stat stat-filter status-confirmed"
+                    data-filter="status:confirmed"
+                  >
+                    <span class="stat-value" id="statConfirmed">0</span>
+                    <span class="stat-label">Confirmaron</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="stat stat-filter status-cancelled"
+                    data-filter="status:cancelled"
+                  >
+                    <span class="stat-value" id="statCancelled">0</span>
+                    <span class="stat-label">Cancelaron</span>
+                  </button>
+                </div>
+                <div class="menu-stats" id="menuBreakdown"></div>
+                <div class="export-row">
+                  <button type="button" id="exportBtn">
+                    <i class="fi fi-rr-file-export"></i> Exportar CSV
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div class="name-filter">
-              <i class="fi fi-rr-search"></i>
-              <input
-                type="text"
-                id="nameFilterInput"
-                placeholder="Buscar invitado por nombre..."
-              />
-            </div>
+              <div class="name-filter">
+                <i class="fi fi-rr-search"></i>
+                <input
+                  type="text"
+                  id="nameFilterInput"
+                  placeholder="Buscar invitado por nombre..."
+                />
+              </div>
 
-            <table class="invitee-table">
-              <thead>
-                <tr>
-                  <th>Nombre</th>
-                  <th>Alias</th>
-                  <th>Estado</th>
-                  <th>Acomp.</th>
-                  <th>Menú</th>
-                  <th>Link</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="inviteesBody"></tbody>
-            </table>
-            <div class="empty-msg" id="emptyMsg" hidden>
-              Todavía no agregaste invitados.
-            </div>
+              <div class="table-scroll">
+                <table class="invitee-table">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Alias</th>
+                      <th>Estado</th>
+                      <th>Acomp.</th>
+                      <th>Menú</th>
+                      <th>Link</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="inviteesBody"></tbody>
+                </table>
+              </div>
+              <div class="empty-msg" id="emptyMsg" hidden>
+                Todavía no agregaste invitados.
+              </div>
+            </section>
+
+            <section id="controlSection" hidden>
+              <div id="controlHome">
+                <div class="control-toolbar" id="controlToolbarInactive">
+                  <button type="button" id="startControlBtn">
+                    <i class="fi fi-rr-play"></i> Start Control
+                  </button>
+                </div>
+                <div class="control-toolbar" id="controlToolbarActive" hidden>
+                  <button type="button" id="prevMediaBtn">
+                    <i class="fi fi-rr-angle-left"></i> Prev
+                  </button>
+                  <button type="button" id="nextMediaBtn">
+                    Next <i class="fi fi-rr-angle-right"></i>
+                  </button>
+                  <button type="button" id="showMediaBtn">
+                    <i class="fi fi-rr-screencast"></i> Show
+                  </button>
+                  <button type="button" class="delete-btn" id="disconnectBtn">
+                    <i class="fi fi-rr-power"></i> Disconnect
+                  </button>
+                </div>
+                <div class="error-msg" id="controlError"></div>
+
+                <div id="controlPreview" hidden>
+                  <div
+                    class="control-preview-media"
+                    id="controlPreviewMedia"
+                  ></div>
+                  <div
+                    class="control-preview-name"
+                    id="controlPreviewName"
+                  ></div>
+                  <div
+                    class="control-preview-desc"
+                    id="controlPreviewDesc"
+                  ></div>
+                </div>
+
+                <ol class="media-list" id="mediaList"></ol>
+                <div class="empty-msg" id="mediaEmptyMsg" hidden>
+                  No hay media cargada. Corré <code>npm run media:upload</code>.
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </main>
