@@ -81,14 +81,6 @@
   },
   {
     "index": 10,
-    "name": "Nico, old times",
-    "desc": "",
-    "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/mah08678.mp4",
-    "filename": "MAH08678.MP4",
-    "type": "video"
-  },
-  {
-    "index": 11,
     "name": "Nico, old friend",
     "desc": "",
     "url": "https://res.cloudinary.com/instabuddy/image/upload/c_limit,f_auto,q_auto,w_1080/v1/bert48/party-2026/10-1997",
@@ -96,7 +88,7 @@
     "type": "image"
   },
   {
-    "index": 12,
+    "index": 11,
     "name": "Calentando el culete",
     "desc": "",
     "url": "https://res.cloudinary.com/instabuddy/image/upload/c_limit,f_auto,q_auto,w_1080/v1/bert48/party-2026/11-21-1996",
@@ -104,7 +96,7 @@
     "type": "image"
   },
   {
-    "index": 13,
+    "index": 12,
     "name": "Guitarreando en el cole",
     "desc": "",
     "url": "https://res.cloudinary.com/instabuddy/image/upload/c_limit,f_auto,q_auto,w_1080/v1/bert48/party-2026/12-22-1996",
@@ -112,7 +104,7 @@
     "type": "image"
   },
   {
-    "index": 14,
+    "index": 13,
     "name": "El crack",
     "desc": "",
     "url": "https://res.cloudinary.com/instabuddy/image/upload/c_limit,f_auto,q_auto,w_1080/v1/bert48/party-2026/13-img-1847",
@@ -120,7 +112,7 @@
     "type": "image"
   },
   {
-    "index": 15,
+    "index": 14,
     "name": "El encantador de bestias",
     "desc": "",
     "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/14mah08678.mp4",
@@ -128,7 +120,7 @@
     "type": "video"
   },
   {
-    "index": 16,
+    "index": 15,
     "name": "El crack volador",
     "desc": "",
     "url": "https://res.cloudinary.com/instabuddy/video/upload/c_limit,q_auto,w_1080/v1/bert48/party-2026/vid-20110825-111340.mp4",
