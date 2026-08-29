@@ -380,6 +380,7 @@
         font-size: 1rem;
         color: var(--green-bright);
         text-shadow: var(--glow);
+        display: none;
       }
 
       /* CANCEL OVERLAY: shown when the invitee's RSVP is cancelled */
@@ -1381,7 +1382,11 @@
         <p class="cancel-overlay-message">
           Cancelaste tu asistencia al evento. Espero verte el año que viene!
         </p>
-        <button type="button" id="cancelOverlayRetryBtn" class="btn-cancel cancel-overlay-retry">
+        <button
+          type="button"
+          id="cancelOverlayRetryBtn"
+          class="btn-cancel cancel-overlay-retry"
+        >
           Retry
         </button>
         <p class="cancel-overlay-error" id="cancelOverlayError" hidden></p>
